@@ -56,6 +56,7 @@ public class AppLoginController {
 
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
+        map.put("uid",userId);
         map.put("expire", jwtUtils.getExpire());
 
         return R.ok(map);

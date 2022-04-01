@@ -1,7 +1,7 @@
 package io.cyf.modules.app.controller;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -87,5 +87,7 @@ public class UserController {
 
         return R.ok();
     }
+
+
 
 }

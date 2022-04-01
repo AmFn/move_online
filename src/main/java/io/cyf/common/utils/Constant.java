@@ -21,6 +21,12 @@ import java.util.stream.Stream;
  * @author Mark sunlightcs@gmail.com
  */
 public class Constant {
+
+    public static final String GAODE_STATUS_OK =  "OK";
+    /**
+     * 高德appKey
+     */
+    public static final String GAODE_APP_KEY="15c907891e55c0bfa1a7ecd1c6b95838";
     /**
      * 超级管理员ID
      */

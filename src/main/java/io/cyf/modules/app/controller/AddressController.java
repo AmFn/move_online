@@ -31,6 +31,15 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
 
+
+    @RequestMapping("/addAddress")
+//    @RequiresPermissions("app:address:list")
+    public R addAddress(@RequestParam Map<String, Object> params){
+        PageUtils page = addressService.queryPage(params);
+
+        return R.ok().put("page", page);
+    }
+
     /**
      * 列表
      */
