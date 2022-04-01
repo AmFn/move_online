@@ -14,6 +14,7 @@
         <result property="avatar" column="avatar"/>
         <result property="addressId" column="address_id"/>
         <result property="type" column="type"/>
+        <result property="newAddressId" column="new_address_id"/>
     </resultMap>
 
 

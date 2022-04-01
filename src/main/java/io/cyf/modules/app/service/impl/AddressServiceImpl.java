@@ -40,6 +40,10 @@ public class AddressServiceImpl extends ServiceImpl<AddressDao, AddressEntity> i
         return new PageUtils(page);
     }
 
+    public boolean saveAddress(){
+
+        return true;
+    }
 
     public  String getDrivingDistance(String origin,String destination){
         String url = "https://restapi.amap.com/v5/direction/driving?key="+ Constant.GAODE_APP_KEY+"&origin="+origin+"&destination="+destination;

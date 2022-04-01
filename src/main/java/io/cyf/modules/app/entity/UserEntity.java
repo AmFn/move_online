@@ -53,6 +53,10 @@ public class UserEntity implements Serializable {
 	 */
 	private Long addressId;
 	/**
+	 * 新地址id
+	 */
+	private Long newAddressId;
+	/**
 	 * 类型;1普通用户|2管理员
 	 */
 	private Integer type;
