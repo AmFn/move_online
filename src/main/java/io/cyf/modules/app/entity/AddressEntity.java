@@ -1,6 +1,7 @@
 package io.cyf.modules.app.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
@@ -44,5 +45,11 @@ public class AddressEntity implements Serializable {
 	 * 位置
 	 */
 	private String location;
+
+	/**
+	 * 是否删除;0未删除|1删除
+	 */
+	@TableLogic
+	private Integer isDel;
 
 }

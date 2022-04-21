@@ -32,6 +32,15 @@ public class AddressController {
     private AddressService addressService;
 
 
+    @RequestMapping("/search_address")
+//    @RequiresPermissions("app:address:list")
+    public R addAddress(){
+
+
+        return R.ok().put("page", "ok");
+    }
+
+
     @RequestMapping("/addAddress")
 //    @RequiresPermissions("app:address:list")
     public R addAddress(@RequestParam Map<String, Object> params){

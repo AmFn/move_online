@@ -33,4 +33,6 @@ public interface UserService extends IService<UserEntity> {
 	long login(LoginForm form);
 
 	PageUtils queryPage(Map<String, Object> params);
+
+    boolean updateAddr(Long oldAddrId, Long newAddrId,Long uid);
 }

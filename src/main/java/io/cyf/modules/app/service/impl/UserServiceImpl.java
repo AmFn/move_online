@@ -55,4 +55,13 @@ public class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements
 
 		return new PageUtils(page);
 	}
+
+	@Override
+	public boolean updateAddr(Long oldAddrId, Long newAddrId,Long uid) {
+		UserEntity userEntity = baseMapper.selectById(uid);
+		userEntity.setNewAddressId(newAddrId);
+		userEntity.setAddressId(oldAddrId);
+		int id = baseMapper.updateById(userEntity);
+		return id > 0;
+	}
 }
