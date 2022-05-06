@@ -1,6 +1,8 @@
 package io.cyf.modules.app.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
@@ -22,7 +24,7 @@ public class UserEntity implements Serializable {
 	/**
 	 * id
 	 */
-	@TableId
+	@TableId(value = "id", type = IdType.AUTO)
 	private Long id;
 	/**
 	 * 用户名
@@ -60,5 +62,8 @@ public class UserEntity implements Serializable {
 	 * 类型;1普通用户|2管理员
 	 */
 	private Integer type;
+	@TableLogic
+	private Integer isDel;
 
+	private Integer enable;
 }

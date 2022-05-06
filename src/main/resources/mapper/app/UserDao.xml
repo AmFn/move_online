@@ -15,6 +15,8 @@
         <result property="addressId" column="address_id"/>
         <result property="type" column="type"/>
         <result property="newAddressId" column="new_address_id"/>
+        <result property="enable" column="enable"/>
+        <result property="isDel" column="is_del"/>
     </resultMap>
 
 

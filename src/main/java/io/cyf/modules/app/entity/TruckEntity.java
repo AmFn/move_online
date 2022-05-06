@@ -1,5 +1,6 @@
 package io.cyf.modules.app.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -23,7 +24,7 @@ public class TruckEntity implements Serializable {
 	/**
 	 * id
 	 */
-	@TableId
+	@TableId(value = "id", type = IdType.AUTO)
 	private Long id;
 	/**
 	 * 类型;1小型|2中型|3大型

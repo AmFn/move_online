@@ -45,6 +45,7 @@ public class AppRegisterController {
         user.setPhone(form.getPhone());
         user.setUsername(form.getPhone());
         user.setPassword(DigestUtils.sha256Hex(form.getPassword()));
+        user.setAvatar("https://s1.ax1x.com/2022/05/01/OCCr4J.jpg");
         userService.save(user);
         return R.ok();
     }

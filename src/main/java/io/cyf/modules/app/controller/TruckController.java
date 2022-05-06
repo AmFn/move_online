@@ -5,12 +5,7 @@ import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import io.cyf.modules.app.entity.TruckEntity;
 import io.cyf.modules.app.service.TruckService;
 import io.cyf.common.utils.PageUtils;
@@ -34,7 +29,7 @@ public class TruckController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
 //    @RequiresPermissions("app:truck:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = truckService.queryPage(params);
@@ -46,7 +41,7 @@ public class TruckController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @GetMapping("/info/{id}")
 //    @RequiresPermissions("app:truck:info")
     public R info(@PathVariable("id") Long id){
 		TruckEntity truck = truckService.getById(id);
@@ -57,9 +52,10 @@ public class TruckController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
 //    @RequiresPermissions("app:truck:save")
     public R save(@RequestBody TruckEntity truck){
+        truck.setStatus(1);
 		truckService.save(truck);
 
         return R.ok();
@@ -68,7 +64,7 @@ public class TruckController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
 //    @RequiresPermissions("app:truck:update")
     public R update(@RequestBody TruckEntity truck){
 		truckService.updateById(truck);
@@ -79,7 +75,7 @@ public class TruckController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
 //    @RequiresPermissions("app:truck:delete")
     public R delete(@RequestBody Long[] ids){
 		truckService.removeByIds(Arrays.asList(ids));

@@ -11,6 +11,8 @@ package io.cyf.modules.app.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.cyf.common.utils.PageUtils;
+import io.cyf.modules.app.Dto.UserAddressDto;
+import io.cyf.modules.app.Dto.UserAddressLocationDto;
 import io.cyf.modules.app.entity.UserEntity;
 import io.cyf.modules.app.form.LoginForm;
 
@@ -35,4 +37,18 @@ public interface UserService extends IService<UserEntity> {
 	PageUtils queryPage(Map<String, Object> params);
 
     boolean updateAddr(Long oldAddrId, Long newAddrId,Long uid);
+
+    UserEntity getUserInfo();
+
+	void disableUser(Long id);
+
+	void enableUser(Long id);
+
+	UserEntity getByAddressId(Long id);
+
+	PageUtils getAddressDtoPage(Map<String, Object> params);
+
+	UserAddressDto getAddressInfo(Long uid);
+
+	void updateLocation(UserAddressLocationDto locationDto);
 }

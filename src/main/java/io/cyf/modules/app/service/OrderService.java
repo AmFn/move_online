@@ -2,8 +2,14 @@ package io.cyf.modules.app.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.cyf.common.utils.PageUtils;
+import io.cyf.modules.app.Dto.CreateOrderDto;
+import io.cyf.modules.app.Dto.OrderInfoDto;
+import io.cyf.modules.app.entity.EmployeeEntity;
+import io.cyf.modules.app.entity.ExtraServiceEntity;
 import io.cyf.modules.app.entity.OrderEntity;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +22,15 @@ import java.util.Map;
 public interface OrderService extends IService<OrderEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    List<EmployeeEntity> getOrderAllEmployee(Long orderId);
+
+    List<ExtraServiceEntity> getOrderAllService(Long orderId);
+
+    boolean create(CreateOrderDto createOrderDto);
+
+    BigDecimal compute(OrderEntity order);
+
+    OrderInfoDto getInfoById(Long id);
 }
 

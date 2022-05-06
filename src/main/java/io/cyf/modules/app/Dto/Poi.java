@@ -15,7 +15,7 @@ import java.util.Date;
 
 @Data
 public class Poi {
-    private  String address;
+    private  Object address;
     private String pcode;
     private String citycode;
     private String adname;

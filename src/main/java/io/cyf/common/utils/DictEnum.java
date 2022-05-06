@@ -19,4 +19,6 @@ public class DictEnum implements  BaseEnum {
     public String getDesc() {
         return null;
     }
+
+
 }

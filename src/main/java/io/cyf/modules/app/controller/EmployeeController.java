@@ -1,16 +1,12 @@
 package io.cyf.modules.app.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import io.cyf.modules.app.entity.EmployeeEntity;
 import io.cyf.modules.app.service.EmployeeService;
 import io.cyf.common.utils.PageUtils;
@@ -34,19 +30,26 @@ public class EmployeeController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
 //    @RequiresPermissions("app:employee:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = employeeService.queryPage(params);
 
         return R.ok().put("page", page);
     }
+    @GetMapping("/drivers")
+
+    public R drivers(){
+        List<EmployeeEntity> list = employeeService.getDrivers();
+
+        return R.ok().put("list", list);
+    }
 
 
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @GetMapping("/info/{id}")
 //    @RequiresPermissions("app:employee:info")
     public R info(@PathVariable("id") Long id){
 		EmployeeEntity employee = employeeService.getById(id);
@@ -57,9 +60,11 @@ public class EmployeeController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
 //    @RequiresPermissions("app:employee:save")
     public R save(@RequestBody EmployeeEntity employee){
+        employee.setStatus(1);
+        employee.setIsDel(0);
 		employeeService.save(employee);
 
         return R.ok();
@@ -68,7 +73,7 @@ public class EmployeeController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
 //    @RequiresPermissions("app:employee:update")
     public R update(@RequestBody EmployeeEntity employee){
 		employeeService.updateById(employee);
@@ -79,7 +84,7 @@ public class EmployeeController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
 //    @RequiresPermissions("app:employee:delete")
     public R delete(@RequestBody Long[] ids){
 		employeeService.removeByIds(Arrays.asList(ids));

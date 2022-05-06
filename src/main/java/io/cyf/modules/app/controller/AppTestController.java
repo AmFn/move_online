@@ -13,27 +13,34 @@ import io.cyf.common.utils.R;
 import io.cyf.modules.app.annotation.Login;
 import io.cyf.modules.app.annotation.LoginUser;
 import io.cyf.modules.app.entity.UserEntity;
+import io.cyf.modules.sys.service.SysUserTokenService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * APP测试接口
  *
- * @author Mark sunlightcs@gmail.com
+ 
  */
 @RestController
 @RequestMapping("/app")
 @Api("APP测试接口")
 public class AppTestController {
 
+
+    @Autowired
+    SysUserTokenService sysUserTokenService;
     @Login
     @GetMapping("userInfo")
     @ApiOperation("获取用户信息")
     public R userInfo(@LoginUser UserEntity user){
+
+        if(StringUtils.isBlank(user.getAvatar())){
+            user.setAvatar("https://s1.ax1x.com/2022/05/01/OCCr4J.jpg");
+        }
         return R.ok().put("user", user);
     }
 
@@ -50,4 +57,12 @@ public class AppTestController {
         return R.ok().put("msg", "无需token也能访问。。。");
     }
 
+    /**
+     * 退出
+     */
+    @GetMapping("/sys/logout/{userId}")
+    public R logout(@PathVariable("userId") Long userId) {
+        sysUserTokenService.logout(userId);
+        return R.ok();
+    }
 }

@@ -21,6 +21,8 @@
         <result property="moveTime" column="move_time"/>
         <result property="message" column="message"/>
         <result property="isDel" column="is_del"/>
+        <result property="sourceAddressId" column="source_address_id"/>
+        <result property="destinationAddressId" column="destination_address_id"/>
     </resultMap>
 
 

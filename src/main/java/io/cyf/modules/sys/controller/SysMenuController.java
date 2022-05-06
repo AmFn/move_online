@@ -20,10 +20,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 系统菜单
@@ -44,8 +42,9 @@ public class SysMenuController extends AbstractController {
 	@GetMapping("/nav")
 	public R nav(){
 		List<SysMenuEntity> menuList = sysMenuService.getUserMenuList(getUserId());
+		List<SysMenuEntity> res = menuList.stream().sorted(Comparator.comparing(SysMenuEntity::getOrderNum)).collect(Collectors.toList());
 		Set<String> permissions = shiroService.getUserPermissions(getUserId());
-		return R.ok().put("menuList", menuList).put("permissions", permissions);
+		return R.ok().put("menuList", res).put("permissions", permissions);
 	}
 	
 	/**

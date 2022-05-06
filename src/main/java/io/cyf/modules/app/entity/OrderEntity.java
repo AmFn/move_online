@@ -1,11 +1,12 @@
 package io.cyf.modules.app.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 
 import java.math.BigDecimal;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -23,7 +24,7 @@ public class OrderEntity implements Serializable {
 	/**
 	 * id
 	 */
-	@TableId
+	@TableId(value = "id", type = IdType.AUTO)
 	private Long id;
 	/**
 	 * 用户id
@@ -61,6 +62,10 @@ public class OrderEntity implements Serializable {
 	 * 距离
 	 */
 	private BigDecimal distance;
+
+	private Long sourceAddressId;
+
+	private Long destinationAddressId;
 	/**
 	 * 额外费用
 	 */
@@ -84,6 +89,10 @@ public class OrderEntity implements Serializable {
 	/**
 	 * 是否删除;0未删除|1删除
 	 */
+	@TableLogic
 	private Integer isDel;
+
+
+
 
 }

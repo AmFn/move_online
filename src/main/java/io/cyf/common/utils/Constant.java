@@ -21,6 +21,22 @@ import java.util.stream.Stream;
  * @author Mark sunlightcs@gmail.com
  */
 public class Constant {
+    /**
+     * 距离费用
+     */
+    public static final  double DISTANCE_FEE = 0.01;
+
+    public static final  double DISTANCE_FEE_EXTRA = 0.05;
+
+    public static final  double DISTANCE_TEN_KILO_MITRE = 10000;
+    /**
+     * 楼层费用
+     */
+    public static final  double STOREY_FEE = 10;
+
+
+
+
 
     public static final String GAODE_STATUS_OK =  "OK";
     /**
@@ -51,6 +67,8 @@ public class Constant {
      * 升序
      */
     public static final String ASC = "asc";
+
+
 
     /**
      * 菜单类型
@@ -111,6 +129,42 @@ public class Constant {
             return value;
         }
     }
+
+    /**
+     * 订单状态;0查询中|1计价完成|2进行中|3已完成|4已支付|5售后中|6异常
+     */
+    public enum OrderStatus{
+        QUERY(0,"查询中"),
+        Computed(1,"计价完成"),
+        MOVING(2,"进行中"),
+        COMPLETED(3,"已完成"),
+        PAYED(4,"已支付"),
+        AFTERMARKET(5,"售后中"),
+        ERROR(6,"异常")
+        ;
+        private int key;
+        private  String  value;
+
+        OrderStatus(int key,String value){
+            this.key = key;
+            this.value = value;
+
+        }
+        public int getKey() {
+            return key;
+        }
+        public String getValue() {
+            return value;
+        }
+        public static String getValueByKey(int key){
+            Optional<OrderStatus> first = Stream.of(OrderStatus.values()).filter(status -> status.key ==key).findFirst();
+            if (!first.isPresent()) {
+                throw new IllegalArgumentException("非法的枚举值:" + key);
+            }
+            return first.get().value;
+        }
+    }
+
 
     /**
      * 云服务商

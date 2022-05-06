@@ -4,21 +4,20 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
- * 用户地址表
+ * 服务_订单表
  * 
  * @author chenyufeng
  * @email chenyufengkkk@163.com
- * @date 2022-03-22 09:43:16
+ * @date 2022-04-21 17:21:02
  */
 @Data
-@TableName("t_address")
-public class AddressEntity implements Serializable {
+@TableName("t_service_order")
+public class ServiceOrderEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -27,26 +26,13 @@ public class AddressEntity implements Serializable {
 	@TableId(value = "id", type = IdType.AUTO)
 	private Long id;
 	/**
-	 * 省
+	 * 订单id
 	 */
-	private String province;
+	private Long orderId;
 	/**
-	 * 市
+	 * 服务id
 	 */
-	private String city;
-	/**
-	 * 区
-	 */
-	private String district;
-	/**
-	 * 详细地址
-	 */
-	private String detail;
-	/**
-	 * 位置
-	 */
-	private String location;
-
+	private Long serviceId;
 	/**
 	 * 是否删除;0未删除|1删除
 	 */

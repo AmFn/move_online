@@ -3,14 +3,12 @@ package io.cyf.modules.app.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.cyf.modules.app.Dto.CreateOrderDto;
+import io.cyf.modules.app.Dto.OrderInfoDto;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import io.cyf.modules.app.entity.OrderEntity;
 import io.cyf.modules.app.service.OrderService;
 import io.cyf.common.utils.PageUtils;
@@ -34,7 +32,20 @@ public class OrderController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    /**
+     * 创建订单
+     */
+    @PostMapping("/create")
+    @Validated
+    public R list(@RequestBody CreateOrderDto createOrderDto){
+        boolean result = orderService.create(createOrderDto);
+
+        return R.ok().put("page", result);
+    }
+
+
+
+    @GetMapping("/list")
 //    @RequiresPermissions("app:order:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = orderService.queryPage(params);
@@ -46,18 +57,17 @@ public class OrderController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @GetMapping("/info/{id}")
 //    @RequiresPermissions("app:order:info")
     public R info(@PathVariable("id") Long id){
-		OrderEntity order = orderService.getById(id);
-
-        return R.ok().put("order", order);
+        OrderInfoDto order = orderService.getInfoById(id);
+        return R.ok().put("order",order );
     }
 
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
 //    @RequiresPermissions("app:order:save")
     public R save(@RequestBody OrderEntity order){
 		orderService.save(order);
@@ -68,7 +78,7 @@ public class OrderController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
 //    @RequiresPermissions("app:order:update")
     public R update(@RequestBody OrderEntity order){
 		orderService.updateById(order);
@@ -79,7 +89,7 @@ public class OrderController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
 //    @RequiresPermissions("app:order:delete")
     public R delete(@RequestBody Long[] ids){
 		orderService.removeByIds(Arrays.asList(ids));

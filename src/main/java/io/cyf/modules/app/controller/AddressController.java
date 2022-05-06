@@ -1,16 +1,19 @@
 package io.cyf.modules.app.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.cyf.common.utils.Query;
+import io.cyf.modules.app.Dto.SearchAddressResponseDto;
+import io.cyf.modules.app.entity.UserEntity;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import io.cyf.modules.app.entity.AddressEntity;
 import io.cyf.modules.app.service.AddressService;
 import io.cyf.common.utils.PageUtils;
@@ -32,12 +35,18 @@ public class AddressController {
     private AddressService addressService;
 
 
-    @RequestMapping("/search_address")
-//    @RequiresPermissions("app:address:list")
-    public R addAddress(){
+    @GetMapping("/{keyword}")
 
-
-        return R.ok().put("page", "ok");
+    public R addAddress(@PathVariable String keyword){
+        List<SearchAddressResponseDto> list = addressService.searchByKeyWord(keyword,null);
+//        List<SearchAddressResponseDto> list = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            SearchAddressResponseDto dto = new SearchAddressResponseDto();
+//            dto.setAddress("贵州省贵阳市贵州大学北校区");
+//            dto.setLocation("100.100.000");
+//            list.add(dto);
+//        }
+        return R.ok().put("data", list);
     }
 
 
@@ -60,7 +69,13 @@ public class AddressController {
         return R.ok().put("page", page);
     }
 
-
+//    @GetMapping("/user_address_list")
+//
+//    public R userAddressList(@RequestParam Map<String, Object> params){
+//        PageUtils page = addressService.getAddressDtoPage(params);
+//        return R.ok().put("page", page);
+//
+//    }
     /**
      * 信息
      */

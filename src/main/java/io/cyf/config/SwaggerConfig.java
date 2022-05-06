@@ -31,7 +31,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
     public Docket createRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.SPRING_WEB)
             .apiInfo(apiInfo())
             .select()
             //加了ApiOperation注解的类，才生成接口文档
