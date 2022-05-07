@@ -36,8 +36,11 @@ public class TruckController {
 
         return R.ok().put("page", page);
     }
-
-
+    @GetMapping("/info/{id}/{orderId}")
+    public R distribution(@PathVariable("id") Long id,@PathVariable("orderId") Long orderId){
+        truckService.distribution(id,orderId);
+        return R.ok();
+    }
     /**
      * 信息
      */

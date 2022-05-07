@@ -6,8 +6,7 @@ import io.cyf.common.exception.RRException;
 import io.cyf.common.utils.Constant;
 import io.cyf.common.utils.PageCovertUtil;
 import io.cyf.common.validator.ValidatorUtils;
-import io.cyf.modules.app.Dto.CreateOrderDto;
-import io.cyf.modules.app.Dto.OrderInfoDto;
+import io.cyf.modules.app.Dto.*;
 import io.cyf.modules.app.entity.*;
 import io.cyf.modules.app.service.*;
 import org.apache.shiro.util.CollectionUtils;
@@ -85,7 +84,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
             dto.setTruckEntity(truck);
         }
 
-
         AddressEntity source = addressService.getById(order.getSourceAddressId());
         AddressEntity destination = addressService.getById(order.getDestinationAddressId());
         UserEntity user = userService.getById(order.getUserId());
@@ -128,6 +126,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         ValidatorUtils.validateEntity(createOrderDto);
         ValidatorUtils.validateEntity(createOrderDto.getNowAddress());
         ValidatorUtils.validateEntity(createOrderDto.getNewAddress());
+
+
         //检查用户是否被禁用
         boolean available = checkUserAvailable(createOrderDto.getUid());
         if(!available){
@@ -144,6 +144,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         if(orderId<0){
             throw  new RRException("价格查询失败");
         }
+
+
         //添加额外服务
         if(CollectionUtil.isNotEmpty(createOrderDto.getExtraServiceIds())){
             createOrderDto.getExtraServiceIds().forEach(serviceId->{
@@ -181,13 +183,89 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         order.setCreateTime(new Date());
         order.setSourceAddressId(user.getAddressId());
         order.setDestinationAddressId(user.getNewAddressId());
+
+//        TruckEntity truckEntity = truckService.getBaseMapper().selectOne(new LambdaQueryWrapper<TruckEntity>().eq(TruckEntity::getStatus, 1));
+//        order.setTruckId(truckEntity.getId());
+
         int insert = baseMapper.insert(order);
         if(insert<0){
             throw new RRException("操作失败");
         }
+
+        //分配货车
+        if(order.getId()!=null){
+            TruckEntity truck = truckService.getOneByType(createOrderDto.getTruckType());
+            truckService.distribution(truck.getId(),order.getId());
+        }
+
         return order.getId();
     }
 
+@Override
+public PriceItem computePrice(OrderEntity order){
+    PriceItem result = new PriceItem();
+    BigDecimal total =  BigDecimal.ZERO;
+    //距离费用
+    BigDecimal distance = order.getDistance();
+    BigDecimal distanceTotal = distance.multiply(new BigDecimal(Constant.DISTANCE_FEE));;
+    if(distance.longValue()>Constant.DISTANCE_TEN_KILO_MITRE){
+        distanceTotal =distanceTotal.add(new BigDecimal(distance.longValue()-Constant.DISTANCE_TEN_KILO_MITRE).multiply(new BigDecimal(Constant.DISTANCE_FEE_EXTRA))).setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+    result.setDistancePrice(distanceTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+    total = total.add(distanceTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+    //楼层费用
+    if(order.getStorey()>0){
+        BigDecimal storeyTotal = new BigDecimal(order.getStorey()).multiply(new BigDecimal(Constant.STOREY_FEE)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        total = total.add(storeyTotal);
+        result.setStoryPrice(storeyTotal);
+    }
+
+
+    //类型基础费用
+    Long moveTypeId = order.getMoveTypeId();
+    MoveTypeEntity moveType = moveTypeService.getById(moveTypeId);
+    total = total.add(moveType.getPrice());
+    result.setTypePrice(moveType.getPrice().setScale(2, BigDecimal.ROUND_HALF_UP));
+    //服务费用
+    BigDecimal serviceTotal  = BigDecimal.ZERO;
+    List<Long> serviceIds = serviceOrderService
+            .getBaseMapper()
+            .selectList(new LambdaQueryWrapper<ServiceOrderEntity>()
+                    .eq(ServiceOrderEntity::getOrderId, order.getId()))
+            .stream()
+            .map(ServiceOrderEntity::getServiceId)
+            .collect(Collectors.toList());
+    List<BigDecimal> serviceFeeList = extraServiceService
+            .listByIds(serviceIds)
+            .stream()
+            .map(ExtraServiceEntity::getPrice)
+            .collect(Collectors.toList());
+    for (BigDecimal fee : serviceFeeList) {
+        serviceTotal =  serviceTotal.add(fee);
+    }
+
+    total = total.add(serviceTotal);
+    result.setServicePrice(serviceTotal.setScale(2, BigDecimal.ROUND_HALF_UP));
+
+    //货车费用
+    if(order.getTruckId()!=null){
+        TruckEntity truck = truckService.getById(order.getUserId());
+        BigDecimal basePrice = truck.getBasePrice().setScale(2, BigDecimal.ROUND_HALF_UP);
+        total =  total.add(basePrice);
+        result.setTruckPrice(basePrice);
+    }
+
+
+    //额外费用
+    if(order.getExtraFee()!=null){
+        BigDecimal extraTotal = order.getExtraFee().setScale(2, BigDecimal.ROUND_HALF_UP);
+        result.setExtraPrice(extraTotal);
+        total =  total.add(extraTotal);
+    }
+
+    result.setTotalPrice(total.setScale(2, BigDecimal.ROUND_HALF_UP));
+    return  result;
+}
     @Override
     public   BigDecimal compute(OrderEntity order){
 
@@ -205,6 +283,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         if(order.getStorey()>0){
         total = total.add(new BigDecimal(order.getStorey()).multiply(new BigDecimal(Constant.STOREY_FEE)));
         }
+
         //类型基础费用
         Long moveTypeId = order.getMoveTypeId();
         MoveTypeEntity moveType = moveTypeService.getById(moveTypeId);
@@ -225,6 +304,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         for (BigDecimal fee : serviceFeeList) {
           total =  total.add(fee);
         }
+
+        //货车费用
+        if(order.getTruckId()!=null){
+            TruckEntity truck = truckService.getById(order.getUserId());
+            BigDecimal basePrice = truck.getBasePrice();
+            total =  total.add(basePrice);
+
+        }
         return  total;
     }
 
@@ -234,5 +321,105 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         OrderInfoDto orderInfoDto = covertOrderInfoDto(orderEntity);
         return orderInfoDto;
 
+    }
+
+    @Override
+    public void confirm(Long id) {
+        OrderEntity orderEntity = baseMapper.selectById(id);
+        if(orderEntity==null){
+            throw  new  RRException("订单查询失败");
+
+        }
+        PriceItem priceItem = this.computePrice(orderEntity);
+        orderEntity.setTotalPrice(priceItem.getTotalPrice());
+        orderEntity.setStatus(Constant.OrderStatus.Computed.getKey());
+        baseMapper.updateById(orderEntity);
+
+    }
+
+    @Override
+    public void editPrice(EditPriceDto editPriceDto) {
+        if(editPriceDto.getId()==null||editPriceDto.getMessage()==null||(editPriceDto.getPrice()==0)){
+            throw new RRException("请检查输入参数");
+        }
+        OrderEntity orderEntity = baseMapper.selectById(editPriceDto.getId());
+        if(orderEntity==null){
+            throw new RRException("查询失败");
+        }
+        orderEntity.setExtraFee(BigDecimal.valueOf(editPriceDto.getPrice()));
+        orderEntity.setMessage(editPriceDto.getMessage());
+        baseMapper.updateById(orderEntity);
+    }
+
+    @Override
+    public void assignEmployee(AssignEmployeeDto assignEmployeeDto) {
+        if(CollectionUtil.isEmpty(assignEmployeeDto.getEmpIds())||assignEmployeeDto.getId()==null){
+            throw  new  RRException("参数错误");
+        }
+        OrderEntity orderEntity = baseMapper.selectById(assignEmployeeDto.getId());
+        if(orderEntity==null){
+            throw  new  RRException("订单不存在");
+        }
+        assignEmployeeDto.getEmpIds().forEach(empId->{
+
+
+            EmployeeOrderEntity employeeOrderEntity = new EmployeeOrderEntity();
+            EmployeeOrderEntity one = employeeOrderService.getOne(new LambdaQueryWrapper<EmployeeOrderEntity>()
+                    .eq(EmployeeOrderEntity::getEmployeeId, empId)
+                    .eq(EmployeeOrderEntity::getOrderId, assignEmployeeDto.getId()));
+            if(one==null){
+                employeeOrderEntity.setOrderId( assignEmployeeDto.getId());
+                employeeOrderEntity.setEmployeeId(empId);
+                employeeOrderService.save(employeeOrderEntity);
+            }
+
+        });
+        List<EmployeeEntity> list = employeeService.listByIds(assignEmployeeDto.getEmpIds());
+        list.forEach(employeeEntity -> {
+            employeeEntity.setStatus(0);
+
+        });
+        employeeService.updateBatchById(list);
+    }
+
+    @Override
+    public void payed(Long id) {
+        OrderEntity orderEntity = baseMapper.selectById(id);
+        if(orderEntity==null){
+            throw  new  RRException("订单查询失败");
+
+        }
+        PriceItem priceItem = this.computePrice(orderEntity);
+        orderEntity.setTotalPrice(priceItem.getTotalPrice());
+        orderEntity.setStatus(Constant.OrderStatus.PAYED.getKey());
+        baseMapper.updateById(orderEntity);
+
+    }
+
+    @Override
+    public void complete(Long id) {
+        OrderEntity orderEntity = baseMapper.selectById(id);
+        if(orderEntity==null){
+            throw  new  RRException("订单查询失败");
+
+        }
+        PriceItem priceItem = this.computePrice(orderEntity);
+        orderEntity.setTotalPrice(priceItem.getTotalPrice());
+        orderEntity.setStatus(Constant.OrderStatus.COMPLETED.getKey());
+        baseMapper.updateById(orderEntity);
+
+    }
+
+    @Override
+    public void startMove(Long id) {
+        OrderEntity orderEntity = baseMapper.selectById(id);
+        if(orderEntity==null){
+            throw  new  RRException("订单查询失败");
+
+        }
+        PriceItem priceItem = this.computePrice(orderEntity);
+        orderEntity.setTotalPrice(priceItem.getTotalPrice());
+        orderEntity.setStatus(Constant.OrderStatus.MOVING.getKey());
+        baseMapper.updateById(orderEntity);
     }
 }

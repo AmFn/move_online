@@ -16,5 +16,11 @@ import java.util.Map;
 public interface TruckService extends IService<TruckEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void distribution(Long id, Long orderId);
+
+
+
+    TruckEntity getOneByType(Integer type);
 }
 

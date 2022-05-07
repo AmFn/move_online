@@ -16,20 +16,22 @@ import io.cyf.common.utils.PageCovertUtil;
 import io.cyf.common.utils.PageUtils;
 import io.cyf.common.utils.Query;
 import io.cyf.common.validator.Assert;
+import io.cyf.modules.app.Dto.OrderInfoDto;
 import io.cyf.modules.app.Dto.UserAddressDto;
 import io.cyf.modules.app.Dto.UserAddressLocationDto;
 import io.cyf.modules.app.dao.UserDao;
 import io.cyf.modules.app.entity.AddressEntity;
+import io.cyf.modules.app.entity.OrderEntity;
 import io.cyf.modules.app.entity.UserEntity;
 import io.cyf.modules.app.form.LoginForm;
 import io.cyf.modules.app.service.AddressService;
+import io.cyf.modules.app.service.OrderService;
 import io.cyf.modules.app.service.UserService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,8 @@ import java.util.Optional;
 class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements UserService {
     @Autowired
     AddressService addressService;
+    @Autowired
+    OrderService orderService;
     @Override
     public UserEntity queryByMobile(String mobile) {
         return baseMapper.selectOne(new QueryWrapper<UserEntity>().eq("phone", mobile));
@@ -216,5 +220,19 @@ class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements UserSe
             addressEntity.setLocation(locationDto.getNewLocation());
             addressService.updateById(addressEntity);
         }
+    }
+
+    @Override
+    public List<OrderInfoDto> getOrders(Long id) {
+        List<OrderInfoDto> result = new ArrayList<>();
+        LambdaQueryWrapper<OrderEntity> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(OrderEntity::getUserId,id);
+        List<OrderEntity> list = orderService.list(wrapper);
+        list.forEach(orderEntity -> {
+            OrderInfoDto infoById = orderService.getInfoById(orderEntity.getId());
+            result.add(infoById);
+        });
+
+        return result;
     }
 }

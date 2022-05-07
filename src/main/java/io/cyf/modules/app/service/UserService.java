@@ -11,11 +11,14 @@ package io.cyf.modules.app.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.cyf.common.utils.PageUtils;
+import io.cyf.modules.app.Dto.OrderInfoDto;
 import io.cyf.modules.app.Dto.UserAddressDto;
 import io.cyf.modules.app.Dto.UserAddressLocationDto;
+import io.cyf.modules.app.entity.OrderEntity;
 import io.cyf.modules.app.entity.UserEntity;
 import io.cyf.modules.app.form.LoginForm;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,4 +54,6 @@ public interface UserService extends IService<UserEntity> {
 	UserAddressDto getAddressInfo(Long uid);
 
 	void updateLocation(UserAddressLocationDto locationDto);
+
+    List<OrderInfoDto> getOrders(Long id);
 }

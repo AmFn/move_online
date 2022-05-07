@@ -37,6 +37,16 @@ public class EmployeeController {
 
         return R.ok().put("page", page);
     }
+
+
+    @GetMapping("/idle_emp")
+
+    public R list(){
+        List<EmployeeEntity> employeeEntities = employeeService.getIdleEmployee();
+
+        return R.ok().put("list", employeeEntities);
+    }
+
     @GetMapping("/drivers")
 
     public R drivers(){

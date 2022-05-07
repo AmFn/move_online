@@ -2,6 +2,7 @@ package io.cyf.modules.app.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.cyf.common.utils.PageUtils;
+import io.cyf.modules.app.Dto.CompensateCreateDto;
 import io.cyf.modules.app.entity.CompensateEntity;
 
 import java.util.Map;
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface CompensateService extends IService<CompensateEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void saveCompensate(CompensateCreateDto compensate);
 }
 

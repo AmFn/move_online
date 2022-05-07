@@ -2,8 +2,7 @@ package io.cyf.modules.app.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.cyf.common.utils.PageUtils;
-import io.cyf.modules.app.Dto.CreateOrderDto;
-import io.cyf.modules.app.Dto.OrderInfoDto;
+import io.cyf.modules.app.Dto.*;
 import io.cyf.modules.app.entity.EmployeeEntity;
 import io.cyf.modules.app.entity.ExtraServiceEntity;
 import io.cyf.modules.app.entity.OrderEntity;
@@ -29,8 +28,24 @@ public interface OrderService extends IService<OrderEntity> {
 
     boolean create(CreateOrderDto createOrderDto);
 
+    PriceItem computePrice(OrderEntity order);
+
     BigDecimal compute(OrderEntity order);
 
     OrderInfoDto getInfoById(Long id);
+
+   
+
+    void confirm(Long id);
+
+    void editPrice(EditPriceDto editPriceDto);
+
+    void assignEmployee(AssignEmployeeDto assignEmployeeDto);
+
+    void payed(Long id);
+
+    void complete(Long id);
+
+    void startMove(Long id);
 }
 

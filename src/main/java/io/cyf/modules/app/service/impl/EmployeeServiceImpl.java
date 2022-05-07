@@ -37,4 +37,12 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeDao, EmployeeEntity
         return baseMapper.selectList(wrapper);
 
     }
+
+    @Override
+    public List<EmployeeEntity> getIdleEmployee() {
+        LambdaQueryWrapper<EmployeeEntity> wrapper = new LambdaQueryWrapper<>();
+        wrapper.ne(EmployeeEntity::getType,1);
+        wrapper.eq(EmployeeEntity::getStatus,1);
+        return baseMapper.selectList(wrapper);
+    }
 }

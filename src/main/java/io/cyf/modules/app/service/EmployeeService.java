@@ -19,5 +19,7 @@ public interface EmployeeService extends IService<EmployeeEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     List<EmployeeEntity> getDrivers();
+
+    List<EmployeeEntity> getIdleEmployee();
 }
 

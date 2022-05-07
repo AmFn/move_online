@@ -3,10 +3,12 @@ package io.cyf.modules.app.controller;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import io.cyf.modules.app.Dto.OrderInfoDto;
 import io.cyf.modules.app.Dto.UserAddressDto;
 import io.cyf.modules.app.Dto.UserAddressLocationDto;
 import io.cyf.modules.app.annotation.Login;
 import io.cyf.modules.app.annotation.LoginUser;
+import io.cyf.modules.app.entity.OrderEntity;
 import io.cyf.modules.sys.controller.AbstractController;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -61,7 +63,13 @@ public class UserController  extends AbstractController {
         return R.ok().put("page", page);
     }
 
+    @GetMapping("/orders/{id}")
 
+    public R orders(@PathVariable("id") Long id){
+       List<OrderInfoDto> list  = userService.getOrders(id);
+
+        return R.ok().put("list", list);
+    }
     /**
      * 信息
      */

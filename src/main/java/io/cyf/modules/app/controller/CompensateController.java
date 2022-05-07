@@ -3,14 +3,10 @@ package io.cyf.modules.app.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.cyf.modules.app.Dto.CompensateCreateDto;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import io.cyf.modules.app.entity.CompensateEntity;
 import io.cyf.modules.app.service.CompensateService;
 import io.cyf.common.utils.PageUtils;
@@ -34,7 +30,7 @@ public class CompensateController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
 //    @RequiresPermissions("app:compensate:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = compensateService.queryPage(params);
@@ -46,7 +42,7 @@ public class CompensateController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @GetMapping("/info/{id}")
 //    @RequiresPermissions("app:compensate:info")
     public R info(@PathVariable("id") Long id){
 		CompensateEntity compensate = compensateService.getById(id);
@@ -54,10 +50,19 @@ public class CompensateController {
         return R.ok().put("compensate", compensate);
     }
 
+    @GetMapping("/audit/{id}")
+//    @RequiresPermissions("app:compensate:info")
+    public R audit(@PathVariable("id") Long id){
+        CompensateEntity compensate = compensateService.getById(id);
+        compensate.setIsAudit(compensate.getIsAudit()==0?1:0);
+        compensateService.updateById(compensate);
+
+        return R.ok();
+    }
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
 //    @RequiresPermissions("app:compensate:save")
     public R save(@RequestBody CompensateEntity compensate){
 		compensateService.save(compensate);
@@ -65,10 +70,18 @@ public class CompensateController {
         return R.ok();
     }
 
+
+    @PostMapping("/compensate_create")
+
+    public R compensateCreate(@RequestBody CompensateCreateDto compensate){
+        compensateService.saveCompensate(compensate);
+
+        return R.ok();
+    }
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
 //    @RequiresPermissions("app:compensate:update")
     public R update(@RequestBody CompensateEntity compensate){
 		compensateService.updateById(compensate);
@@ -79,7 +92,7 @@ public class CompensateController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
 //    @RequiresPermissions("app:compensate:delete")
     public R delete(@RequestBody Long[] ids){
 		compensateService.removeByIds(Arrays.asList(ids));
