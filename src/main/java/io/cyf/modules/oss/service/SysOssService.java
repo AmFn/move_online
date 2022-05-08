@@ -11,6 +11,7 @@ package io.cyf.modules.oss.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import io.cyf.common.utils.PageUtils;
 import io.cyf.modules.oss.entity.SysOssEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -22,4 +23,6 @@ import java.util.Map;
 public interface SysOssService extends IService<SysOssEntity> {
 
 	PageUtils queryPage(Map<String, Object> params);
+
+    String uploadFileAvatar(MultipartFile file);
 }

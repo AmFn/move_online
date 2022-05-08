@@ -7,7 +7,7 @@ server:
   port: 8089
   connection-timeout: 5000ms
   servlet:
-    context-path: /renren-fast
+    context-path: /cyf
 
 spring:
   # 环境 dev|test|prod
@@ -61,7 +61,13 @@ mybatis-plus:
     call-setters-on-nulls: true
     jdbc-type-for-null: 'null'
 
-
+aliyun:
+  oss:
+    file:
+      endpoint: oss-cn-shenzhen.aliyuncs.com
+      keyid: LTAI4GFnTYjVH8Y73k4oKSrg
+      keysecret: KN0QatGmkMxdsKRuhn5yqZBBKZUhpa
+      bucketname: cyf-file
 renren:
   redis:
     open: false

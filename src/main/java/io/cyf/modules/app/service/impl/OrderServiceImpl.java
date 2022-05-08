@@ -249,7 +249,10 @@ public PriceItem computePrice(OrderEntity order){
 
     //货车费用
     if(order.getTruckId()!=null){
-        TruckEntity truck = truckService.getById(order.getUserId());
+        TruckEntity truck = truckService.getById(order.getTruckId());
+        if(truck!=null){
+
+        }
         BigDecimal basePrice = truck.getBasePrice().setScale(2, BigDecimal.ROUND_HALF_UP);
         total =  total.add(basePrice);
         result.setTruckPrice(basePrice);

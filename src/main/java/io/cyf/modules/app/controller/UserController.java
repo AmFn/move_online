@@ -3,6 +3,7 @@ package io.cyf.modules.app.controller;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import io.cyf.common.exception.RRException;
 import io.cyf.modules.app.Dto.OrderInfoDto;
 import io.cyf.modules.app.Dto.UserAddressDto;
 import io.cyf.modules.app.Dto.UserAddressLocationDto;
@@ -101,7 +102,24 @@ public class UserController  extends AbstractController {
         return R.ok();
     }
 
-
+    @PostMapping("/update")
+//    @RequiresPermissions("app:user:save")
+    public R update(@RequestBody UserEntity user){
+        if(user.getId()==null){
+            throw  new RRException("用户信息不存在");
+        }
+        UserEntity userEntity = userService.getById(user.getId());
+        if(user.getAvatar()!=null ){
+            userEntity.setAvatar(user.getAvatar());
+        }
+        userEntity.setPhone(user.getPhone());
+        userEntity.setUsername(user.getUsername());
+        userEntity.setRealName(user.getRealName());
+        userEntity.setAge(user.getAge());
+        userService.updateById(userEntity);
+        UserEntity result = userService.getById(user.getId());
+        return R.ok().put("user",result);
+    }
     /**
      * 保存
      */
