@@ -7,6 +7,7 @@ import io.cyf.modules.app.Dto.SaveAddressDTO;
 import io.cyf.modules.app.entity.OrderEntity;
 import io.cyf.modules.app.service.OrderService;
 import io.cyf.modules.app.service.impl.OrderServiceImpl;
+import io.cyf.modules.app.service.impl.SmsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +28,11 @@ import java.util.List;
 @SpringBootTest
 @Slf4j
 public class ServiceTests {
+    @Test
+    public void sendTest() throws Exception {
+        SmsServiceImpl smsService = new SmsServiceImpl();
+smsService.sendByAliyun("16685274469","1234");
+    }
 
     @Autowired
     OrderService orderService;

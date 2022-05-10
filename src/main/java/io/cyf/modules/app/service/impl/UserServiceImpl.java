@@ -59,6 +59,8 @@ class UserServiceImpl extends ServiceImpl<UserDao, UserEntity> implements UserSe
         return user.getId();
     }
 
+
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
 

@@ -1,5 +1,7 @@
 package io.cyf.modules.app.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,8 +12,10 @@ import io.cyf.modules.app.Dto.UserAddressLocationDto;
 import io.cyf.modules.app.annotation.Login;
 import io.cyf.modules.app.annotation.LoginUser;
 import io.cyf.modules.app.entity.OrderEntity;
+import io.cyf.modules.app.service.SmsService;
 import io.cyf.modules.sys.controller.AbstractController;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.io.IOUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +24,9 @@ import io.cyf.modules.app.service.UserService;
 import io.cyf.common.utils.PageUtils;
 import io.cyf.common.utils.R;
 
-
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用户表
@@ -35,7 +41,8 @@ public class UserController  extends AbstractController {
     @Autowired
     private UserService userService;
 
-
+@Autowired
+SmsService smsService;
     @Login
     @GetMapping("userInfo")
     @ApiOperation("获取用户信息")
@@ -102,6 +109,18 @@ public class UserController  extends AbstractController {
         return R.ok();
     }
 
+
+    @GetMapping("/code/{phone}")
+    public R getCode(@PathVariable("phone") String phone){
+        Map<String, Object> map = smsService.sendMsg(phone);
+        boolean flag = (boolean) map.get("flag");
+        if (flag){
+            return R.ok().put("data", map.get("uuid"));
+        }
+        else {
+            return R.error("短信发送失败");
+        }
+    }
     @PostMapping("/update")
 //    @RequiresPermissions("app:user:save")
     public R update(@RequestBody UserEntity user){

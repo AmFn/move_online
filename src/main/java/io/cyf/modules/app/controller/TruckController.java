@@ -30,7 +30,6 @@ public class TruckController {
      * 列表
      */
     @GetMapping("/list")
-//    @RequiresPermissions("app:truck:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = truckService.queryPage(params);
 
@@ -45,7 +44,6 @@ public class TruckController {
      * 信息
      */
     @GetMapping("/info/{id}")
-//    @RequiresPermissions("app:truck:info")
     public R info(@PathVariable("id") Long id){
 		TruckEntity truck = truckService.getById(id);
 
@@ -56,7 +54,6 @@ public class TruckController {
      * 保存
      */
     @PostMapping("/save")
-//    @RequiresPermissions("app:truck:save")
     public R save(@RequestBody TruckEntity truck){
         truck.setStatus(1);
 		truckService.save(truck);
@@ -68,7 +65,6 @@ public class TruckController {
      * 修改
      */
     @PostMapping("/update")
-//    @RequiresPermissions("app:truck:update")
     public R update(@RequestBody TruckEntity truck){
 		truckService.updateById(truck);
 
@@ -79,7 +75,7 @@ public class TruckController {
      * 删除
      */
     @DeleteMapping("/delete")
-//    @RequiresPermissions("app:truck:delete")
+
     public R delete(@RequestBody Long[] ids){
 		truckService.removeByIds(Arrays.asList(ids));
 

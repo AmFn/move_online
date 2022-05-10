@@ -30,4 +30,11 @@ public class RegisterForm {
     @NotBlank(message="密码不能为空")
     private String password;
 
+
+    @ApiModelProperty(value = "密码")
+    @NotBlank(message="密码不能为空")
+    private String captcha;
+
+    private String uuid;
+
 }
