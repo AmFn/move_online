@@ -64,10 +64,10 @@ mybatis-plus:
 aliyun:
   oss:
     file:
-      endpoint: oss-cn-shenzhen.aliyuncs.com
-      keyid: LTAI4GFnTYjVH8Y73k4oKSrg
-      keysecret: KN0QatGmkMxdsKRuhn5yqZBBKZUhpa
-      bucketname: cyf-file
+      endpoint: endpoint
+      keyid: keyid
+      keysecret: keysecret
+      bucketname: cyf-filex
 renren:
   redis:
     open: false
