@@ -8,6 +8,8 @@
 
 package io.cyf.config;
 
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,7 @@ import static com.google.common.collect.Lists.newArrayList;
 
 @Configuration
 @EnableSwagger2
+@EnableKnife4j
 public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
@@ -34,8 +37,8 @@ public class SwaggerConfig implements WebMvcConfigurer {
         return new Docket(DocumentationType.SPRING_WEB)
             .apiInfo(apiInfo())
             .select()
-            //加了ApiOperation注解的类，才生成接口文档
-//            .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+            //加了Api注解的类，才生成接口文档
+            .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
             //包下的类，才生成接口文档
             .apis(RequestHandlerSelectors.basePackage("io.cyf.modules.app"))
             .paths(PathSelectors.any())

@@ -3,14 +3,10 @@ package io.cyf.modules.app.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import io.cyf.modules.app.entity.MoveTypeEntity;
 import io.cyf.modules.app.service.MoveTypeService;
 import io.cyf.common.utils.PageUtils;
@@ -27,6 +23,7 @@ import io.cyf.common.utils.R;
  */
 @RestController
 @RequestMapping("app/movetype")
+@Api(tags="类型管理")
 public class MoveTypeController {
     @Autowired
     private MoveTypeService moveTypeService;
@@ -34,7 +31,7 @@ public class MoveTypeController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
 //    @RequiresPermissions("app:movetype:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = moveTypeService.queryPage(params);
@@ -46,7 +43,7 @@ public class MoveTypeController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @GetMapping("/info/{id}")
 //    @RequiresPermissions("app:movetype:info")
     public R info(@PathVariable("id") Long id){
 		MoveTypeEntity moveType = moveTypeService.getById(id);
@@ -57,7 +54,7 @@ public class MoveTypeController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
 //    @RequiresPermissions("app:movetype:save")
     public R save(@RequestBody MoveTypeEntity moveType){
 		moveTypeService.save(moveType);
@@ -68,7 +65,7 @@ public class MoveTypeController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
 //    @RequiresPermissions("app:movetype:update")
     public R update(@RequestBody MoveTypeEntity moveType){
 		moveTypeService.updateById(moveType);
@@ -79,7 +76,7 @@ public class MoveTypeController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
 //    @RequiresPermissions("app:movetype:delete")
     public R delete(@RequestBody Long[] ids){
 		moveTypeService.removeByIds(Arrays.asList(ids));

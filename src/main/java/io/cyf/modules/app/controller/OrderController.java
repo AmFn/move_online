@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import io.cyf.common.exception.RRException;
 import io.cyf.modules.app.Dto.*;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +27,7 @@ import io.cyf.common.utils.R;
  */
 @RestController
 @RequestMapping("app/order")
+@Api(tags="订单接口")
 public class OrderController {
     @Autowired
     private OrderService orderService;

@@ -10,6 +10,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.cyf.common.utils.Query;
 import io.cyf.modules.app.Dto.SearchAddressResponseDto;
 import io.cyf.modules.app.entity.UserEntity;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -30,13 +33,14 @@ import io.cyf.common.utils.R;
  */
 @RestController
 @RequestMapping("app/address")
+@Api(tags = "地址管理")
 public class AddressController {
     @Autowired
     private AddressService addressService;
 
 
     @GetMapping("/{keyword}")
-
+    @ApiOperation(value = "搜索地址", httpMethod = "GET",notes = "搜索地址")
     public R addAddress(@PathVariable String keyword){
         List<SearchAddressResponseDto> list = addressService.searchByKeyWord(keyword,null);
 //        List<SearchAddressResponseDto> list = new ArrayList<>();
@@ -50,18 +54,12 @@ public class AddressController {
     }
 
 
-    @RequestMapping("/addAddress")
-//    @RequiresPermissions("app:address:list")
-    public R addAddress(@RequestParam Map<String, Object> params){
-        PageUtils page = addressService.queryPage(params);
-
-        return R.ok().put("page", page);
-    }
 
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
+    @ApiOperation(value = "地址列表", httpMethod = "GET")
 //    @RequiresPermissions("app:address:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = addressService.queryPage(params);
@@ -79,7 +77,8 @@ public class AddressController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @GetMapping("/info/{id}")
+    @ApiOperation(value = "地址详情", httpMethod = "GET")
 //    @RequiresPermissions("app:address:info")
     public R info(@PathVariable("id") Long id){
 		AddressEntity address = addressService.getById(id);
@@ -90,8 +89,8 @@ public class AddressController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
-//    @RequiresPermissions("app:address:save")
+    @PostMapping("/save")
+    @ApiOperation(value = "添加地址", httpMethod = "POST")
     public R save(@RequestBody AddressEntity address){
 		addressService.save(address);
 
@@ -101,7 +100,8 @@ public class AddressController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
+    @ApiOperation(value = "修改地址", httpMethod = "POST")
 //    @RequiresPermissions("app:address:update")
     public R update(@RequestBody AddressEntity address){
 		addressService.updateById(address);
@@ -112,8 +112,9 @@ public class AddressController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
 //    @RequiresPermissions("app:address:delete")
+    @ApiOperation(value = "删除地址", httpMethod = "DELETE")
     public R delete(@RequestBody Long[] ids){
 		addressService.removeByIds(Arrays.asList(ids));
 

@@ -3,14 +3,10 @@ package io.cyf.modules.app.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import io.cyf.modules.app.entity.ExtraServiceEntity;
 import io.cyf.modules.app.service.ExtraServiceService;
 import io.cyf.common.utils.PageUtils;
@@ -27,6 +23,7 @@ import io.cyf.common.utils.R;
  */
 @RestController
 @RequestMapping("app/extraservice")
+@Api(tags="服务管理")
 public class ExtraServiceController {
     @Autowired
     private ExtraServiceService extraServiceService;
@@ -34,7 +31,7 @@ public class ExtraServiceController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
 //    @RequiresPermissions("app:extraservice:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = extraServiceService.queryPage(params);
@@ -46,7 +43,7 @@ public class ExtraServiceController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @GetMapping("/info/{id}")
 //    @RequiresPermissions("app:extraservice:info")
     public R info(@PathVariable("id") Long id){
 		ExtraServiceEntity extraService = extraServiceService.getById(id);
@@ -57,7 +54,7 @@ public class ExtraServiceController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
 //    @RequiresPermissions("app:extraservice:save")
     public R save(@RequestBody ExtraServiceEntity extraService){
 		extraServiceService.save(extraService);
@@ -68,7 +65,7 @@ public class ExtraServiceController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
 //    @RequiresPermissions("app:extraservice:update")
     public R update(@RequestBody ExtraServiceEntity extraService){
 		extraServiceService.updateById(extraService);
@@ -79,7 +76,7 @@ public class ExtraServiceController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
 //    @RequiresPermissions("app:extraservice:delete")
     public R delete(@RequestBody Long[] ids){
 		extraServiceService.removeByIds(Arrays.asList(ids));

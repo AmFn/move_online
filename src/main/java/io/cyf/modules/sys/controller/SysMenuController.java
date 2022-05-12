@@ -42,7 +42,10 @@ public class SysMenuController extends AbstractController {
 	@GetMapping("/nav")
 	public R nav(){
 		List<SysMenuEntity> menuList = sysMenuService.getUserMenuList(getUserId());
-		List<SysMenuEntity> res = menuList.stream().sorted(Comparator.comparing(SysMenuEntity::getOrderNum)).collect(Collectors.toList());
+		List<SysMenuEntity> res = menuList.stream().
+				sorted(Comparator.comparing(SysMenuEntity::getOrderNum))
+
+				.collect(Collectors.toList());
 		Set<String> permissions = shiroService.getUserPermissions(getUserId());
 		return R.ok().put("menuList", res).put("permissions", permissions);
 	}

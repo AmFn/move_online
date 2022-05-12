@@ -9,6 +9,7 @@ import io.cyf.common.utils.PageUtils;
 import io.cyf.common.utils.R;
 import io.cyf.modules.app.Dto.AddCommentDto;
 import io.cyf.modules.app.Dto.CommitDto;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import io.cyf.modules.app.service.CommentService;
  */
 @RestController
 @RequestMapping("app/comment")
+@Api(tags="评论管理")
 public class CommentController {
     @Autowired
     private CommentService commentService;
@@ -34,7 +36,7 @@ public class CommentController {
     /**
      * 列表
      */
-    @RequestMapping("/list")
+    @GetMapping("/list")
 
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = commentService.queryPage(params);
@@ -67,7 +69,7 @@ public class CommentController {
     /**
      * 信息
      */
-    @RequestMapping("/info/{id}")
+    @GetMapping("/info/{id}")
 
     public R info(@PathVariable("id") Long id){
 		CommentEntity comment = commentService.getById(id);
@@ -78,7 +80,7 @@ public class CommentController {
     /**
      * 保存
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
 
     public R save(@RequestBody CommentEntity comment){
 		commentService.save(comment);
@@ -89,7 +91,7 @@ public class CommentController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @PostMapping("/update")
 
     public R update(@RequestBody CommentEntity comment){
 		commentService.updateById(comment);
@@ -100,7 +102,7 @@ public class CommentController {
     /**
      * 删除
      */
-    @RequestMapping("/delete")
+    @DeleteMapping("/delete")
 
     public R delete(@RequestBody Long[] ids){
 		commentService.removeByIds(Arrays.asList(ids));

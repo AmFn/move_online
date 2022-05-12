@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import io.cyf.modules.app.Dto.CompensateCreateDto;
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ import io.cyf.common.utils.R;
  */
 @RestController
 @RequestMapping("app/compensate")
+@Api(tags="赔偿管理")
 public class CompensateController {
     @Autowired
     private CompensateService compensateService;

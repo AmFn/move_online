@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.cyf.common.exception.RRException;
 import io.cyf.modules.app.Dto.OrderInfoDto;
 import io.cyf.modules.app.Dto.UserAddressDto;
@@ -12,9 +13,13 @@ import io.cyf.modules.app.Dto.UserAddressLocationDto;
 import io.cyf.modules.app.annotation.Login;
 import io.cyf.modules.app.annotation.LoginUser;
 import io.cyf.modules.app.entity.OrderEntity;
+import io.cyf.modules.app.form.RegisterForm;
 import io.cyf.modules.app.service.SmsService;
 import io.cyf.modules.sys.controller.AbstractController;
+import io.cyf.modules.sys.service.SysCaptchaService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +42,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("app/user")
+@Api(tags="用户接口")
 public class UserController  extends AbstractController {
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private SysCaptchaService sysCaptchaService;
 @Autowired
 SmsService smsService;
     @Login
@@ -58,6 +65,23 @@ SmsService smsService;
         PageUtils page = userService.getAddressDtoPage(params);
 
         return R.ok().put("page", page);
+    }
+
+
+    @PostMapping("/reset_pwd")
+    public R resetPassword(@RequestBody RegisterForm form){
+        UserEntity one = userService.getOne(new LambdaQueryWrapper<UserEntity>().eq(UserEntity::getPhone, form.getPhone()));
+        if(one==null){
+            throw new RRException("手机号不存在");
+        }
+
+        boolean captcha = sysCaptchaService.validate(form.getUuid(), form.getCaptcha());
+        if(!captcha){
+            return R.error("验证码不正确");
+        }
+        one.setPassword(DigestUtils.sha256Hex(form.getPassword()));
+        userService.updateById(one);
+        return R.ok();
     }
 
     /**

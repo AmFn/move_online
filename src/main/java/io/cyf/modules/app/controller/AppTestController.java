@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/app")
-@Api("APP测试接口")
+@Api(tags="APP测试接口")
 public class AppTestController {
 
 

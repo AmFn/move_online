@@ -3,6 +3,7 @@ package io.cyf.modules.app.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ import io.cyf.common.utils.R;
  */
 @RestController
 @RequestMapping("app/truck")
+@Api(tags="车辆管理接口")
 public class TruckController {
     @Autowired
     private TruckService truckService;
