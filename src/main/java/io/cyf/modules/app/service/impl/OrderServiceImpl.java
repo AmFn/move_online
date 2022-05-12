@@ -327,6 +327,20 @@ public PriceItem computePrice(OrderEntity order){
     }
 
     @Override
+    public void updateStatus(Long id, Integer status) {
+        OrderEntity orderEntity = baseMapper.selectById(id);
+        if(orderEntity==null){
+            throw  new  RRException("订单查询失败");
+
+        }
+        PriceItem priceItem = this.computePrice(orderEntity);
+        orderEntity.setTotalPrice(priceItem.getTotalPrice());
+        orderEntity.setStatus(status);
+        baseMapper.updateById(orderEntity);
+
+    }
+
+    @Override
     public void confirm(Long id) {
         OrderEntity orderEntity = baseMapper.selectById(id);
         if(orderEntity==null){

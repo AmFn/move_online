@@ -72,7 +72,41 @@ public class SmsServiceImpl implements SmsService {
         System.out.println(code);
         return map;
     }
+    public static boolean sendPriceByAliyun(String phoneNumber,String price){
 
+        log.error("{}发送价格信息",phoneNumber);
+        DefaultProfile profile =
+                DefaultProfile.getProfile("default", ConstantPropertiesUtil.ACCESS_KEY_ID, ConstantPropertiesUtil.ACCESS_KEY_SECRET);
+        IAcsClient client = new DefaultAcsClient(profile);
+
+        //设置相关固定的参数
+        CommonRequest request = new CommonRequest();
+        //request.setProtocol(ProtocolType.HTTPS);
+        request.setMethod(MethodType.POST);
+        request.setDomain("dysmsapi.aliyuncs.com");
+        request.setVersion("2017-05-25");
+        request.setAction("SendSms");
+
+        //设置发送相关的参数
+        request.putQueryParameter("SignName","多彩校园二手平台");
+        request.putQueryParameter("PhoneNumbers",phoneNumber);
+
+        request.putQueryParameter("TemplateCode","SMS_241345283");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("price",price);
+        request.putQueryParameter("TemplateParam", JSONObject.toJSONString(map));
+        try {
+            //最终发送
+            CommonResponse response = client.getCommonResponse(request);
+            boolean success = response.getHttpResponse().isSuccess();
+            return success;
+        }catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 
  public static boolean sendByAliyun(String phoneNumber,String code){
 

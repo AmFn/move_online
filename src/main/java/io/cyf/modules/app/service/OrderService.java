@@ -34,7 +34,7 @@ public interface OrderService extends IService<OrderEntity> {
 
     OrderInfoDto getInfoById(Long id);
 
-   
+   void  updateStatus(Long id,Integer status);
 
     void confirm(Long id);
 

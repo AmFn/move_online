@@ -31,7 +31,8 @@ public class ServiceTests {
     @Test
     public void sendTest() throws Exception {
         SmsServiceImpl smsService = new SmsServiceImpl();
-smsService.sendByAliyun("16685274469","1234");
+        boolean b = smsService.sendPriceByAliyun("16685274469", "120");
+        log.info("发送结果{}",b);
     }
 
     @Autowired
