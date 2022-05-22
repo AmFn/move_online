@@ -48,5 +48,9 @@ public interface OrderService extends IService<OrderEntity> {
     void complete(Long id);
 
     void startMove(Long id);
+
+    void AutoAssignEmployee(Long id);
+
+    int getAssignedEmployeeCount(Long id);
 }
 

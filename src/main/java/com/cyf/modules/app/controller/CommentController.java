@@ -60,6 +60,7 @@ public class CommentController {
         commentEntity.setUid(dto.getUid());
         commentEntity.setOrderId(dto.getOrderId());
         commentEntity.setTime(System.currentTimeMillis());
+        commentEntity.setIsDel(0);
         commentService.save(commentEntity);
         return R.ok();
     }
@@ -101,7 +102,7 @@ public class CommentController {
     /**
      * 删除
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
 
     public R delete(@RequestBody Long[] ids){
 		commentService.removeByIds(Arrays.asList(ids));

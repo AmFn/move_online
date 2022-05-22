@@ -109,6 +109,12 @@ public class OrderController {
         orderService.assignEmployee(assignEmployeeDto);
         return  R.ok();
 }
+
+    @GetMapping("/assign_emp_auto/{id}")
+    public R autoAssign(@PathVariable("id") Long id) {
+        orderService.AutoAssignEmployee(id);
+        return R.ok();
+    }
     /**
      * 保存
      */
@@ -134,7 +140,7 @@ public class OrderController {
     /**
      * 删除
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
 //    @RequiresPermissions("app:order:delete")
     public R delete(@RequestBody Long[] ids){
 		orderService.removeByIds(Arrays.asList(ids));

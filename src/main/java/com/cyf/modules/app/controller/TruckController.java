@@ -57,6 +57,7 @@ public class TruckController {
     @PostMapping("/save")
     public R save(@RequestBody TruckEntity truck){
         truck.setStatus(1);
+        truck.setIsDel(0);
 		truckService.save(truck);
 
         return R.ok();
@@ -75,7 +76,7 @@ public class TruckController {
     /**
      * 删除
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
 
     public R delete(@RequestBody Long[] ids){
 		truckService.removeByIds(Arrays.asList(ids));

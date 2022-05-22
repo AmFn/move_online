@@ -52,7 +52,6 @@ public class AppRegisterController {
 		if(!captcha){
 			return R.error("验证码不正确");
 		}
-
         UserEntity user = new UserEntity();
         user.setPhone(form.getPhone());
         user.setUsername(form.getPhone());

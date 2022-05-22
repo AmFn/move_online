@@ -21,6 +21,9 @@ public class Constant {
     /**
      * 距离费用
      */
+
+
+    public  static  final  String GAODE_SEARCH_URL  = "https://restapi.amap.com/v3/place/text";
     public static final  double DISTANCE_FEE = 0.01;
 
     public static final  double DISTANCE_FEE_EXTRA = 0.05;

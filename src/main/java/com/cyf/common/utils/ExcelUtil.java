@@ -23,15 +23,13 @@ public class ExcelUtil {
      * @throws Exception
      */
     public static void writeExcel(HttpServletResponse response, List<? extends Object> data, String fileName, String sheetName, Class clazz) throws Exception {
-        //表头样式
+        //设置样式
         WriteCellStyle headWriteCellStyle = new WriteCellStyle();
-        //设置表头居中对齐
         headWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
-        //内容样式
         WriteCellStyle contentWriteCellStyle = new WriteCellStyle();
-        //设置内容靠左对齐
         contentWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.LEFT);
         HorizontalCellStyleStrategy horizontalCellStyleStrategy = new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
+        //调用Easyexcel 写入excel文件
         EasyExcel.write(getOutputStream(fileName, response), clazz).excelType(ExcelTypeEnum.XLSX).sheet(sheetName).registerWriteHandler(horizontalCellStyleStrategy).doWrite(data);
     }
     private static OutputStream getOutputStream(String fileName, HttpServletResponse response) throws Exception {

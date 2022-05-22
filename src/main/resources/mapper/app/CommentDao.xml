@@ -10,6 +10,7 @@
         <result property="orderId" column="order_id"/>
         <result property="time" column="time"/>
         <result property="content" column="content"/>
+        <result property="grade" column="grade"/>
         <result property="isDel" column="is_del"/>
     </resultMap>
 

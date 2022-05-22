@@ -22,8 +22,8 @@ public interface AddressService extends IService<AddressEntity> {
 
     String getDrivingDistance(String origin, String destination);
 
-    List<SearchAddressResponseDto> searchByKeyWord(String keyword, String city);
 
 
+    List<SearchAddressResponseDto> searchByKeyWord(String keyword, String city, int offset, int page);
 }
 

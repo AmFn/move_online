@@ -75,7 +75,7 @@ public class MoveTypeController {
     /**
      * 删除
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
 //    @RequiresPermissions("app:movetype:delete")
     public R delete(@RequestBody Long[] ids){
 		moveTypeService.removeByIds(Arrays.asList(ids));

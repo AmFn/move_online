@@ -2,6 +2,7 @@ package com.cyf.modules.app.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.math.BigDecimal;
@@ -38,5 +39,6 @@ public class ExtraServiceEntity implements Serializable {
 	 * 服务描述
 	 */
 	private String description;
-
+	@TableLogic
+	private Integer isDel;
 }

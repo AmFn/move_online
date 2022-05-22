@@ -34,7 +34,7 @@ public class AddressController {
     @GetMapping("/{keyword}")
     @ApiOperation(value = "搜索地址", httpMethod = "GET",notes = "搜索地址")
     public R addAddress(@PathVariable String keyword){
-        List<SearchAddressResponseDto> list = addressService.searchByKeyWord(keyword,null);
+        List<SearchAddressResponseDto> list = addressService.searchByKeyWord(keyword,null,10,1);
 //        List<SearchAddressResponseDto> list = new ArrayList<>();
 //        for (int i = 0; i < 10; i++) {
 //            SearchAddressResponseDto dto = new SearchAddressResponseDto();

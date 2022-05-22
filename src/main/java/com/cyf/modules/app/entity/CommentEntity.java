@@ -1,6 +1,8 @@
 package com.cyf.modules.app.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
@@ -43,6 +45,11 @@ public class CommentEntity implements Serializable {
 	/**
 	 * 
 	 */
+	@TableLogic
 	private Integer isDel;
 
+	private  double grade;
+
+	@TableField(exist = false)
+	private  String  type;
 }

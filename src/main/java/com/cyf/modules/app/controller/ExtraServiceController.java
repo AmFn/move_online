@@ -56,6 +56,7 @@ public class ExtraServiceController {
     @PostMapping("/save")
 //    @RequiresPermissions("app:extraservice:save")
     public R save(@RequestBody ExtraServiceEntity extraService){
+        extraService.setIsDel(0);
 		extraServiceService.save(extraService);
 
         return R.ok();
@@ -75,7 +76,7 @@ public class ExtraServiceController {
     /**
      * 删除
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
 //    @RequiresPermissions("app:extraservice:delete")
     public R delete(@RequestBody Long[] ids){
 		extraServiceService.removeByIds(Arrays.asList(ids));

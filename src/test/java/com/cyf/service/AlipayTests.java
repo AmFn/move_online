@@ -29,4 +29,12 @@ public class AlipayTests {
         System.out.println(tradeStatus);
 
     }
+
+    @Test
+    public void getOrderStatus(){
+        String s = aliPayService.queryOrder("2");
+        System.out.println(s);
+
+    }
+
 }

@@ -53,4 +53,7 @@ public class EmployeeEntity implements Serializable {
 	@TableLogic
 	private Integer isDel;
 
+
+	private  Integer orderCount;
+
 }

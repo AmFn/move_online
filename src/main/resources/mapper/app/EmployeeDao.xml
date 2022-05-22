@@ -11,6 +11,7 @@
         <result property="phone" column="phone"/>
         <result property="type" column="type"/>
         <result property="isDel" column="is_del"/>
+        <result property="orderCount" column="order_count"/>
     </resultMap>
 
 
