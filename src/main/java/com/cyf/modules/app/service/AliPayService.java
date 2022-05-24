@@ -1,5 +1,7 @@
 package com.cyf.modules.app.service;
 
+import com.cyf.modules.app.entity.CompensateEntity;
+
 import java.util.Map;
 
 public interface AliPayService {
@@ -17,6 +19,8 @@ public interface AliPayService {
 //    void checkOrderStatus(String orderNo);
 //
     void refund(String orderNo, String reason);
+
+    String refundByCompensateItem(CompensateEntity item);
 //
 //    String queryRefund(String orderNo);
 //

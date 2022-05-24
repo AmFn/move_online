@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/app")
-@Api(tags="APP注册接口")
+@Api(tags="注册接口")
 public class AppRegisterController {
     @Autowired
     private UserService userService;

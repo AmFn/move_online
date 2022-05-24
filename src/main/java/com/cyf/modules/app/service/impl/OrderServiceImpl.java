@@ -418,4 +418,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         wrapper.eq(EmployeeOrderEntity::getOrderId,id);
         return employeeOrderService.getBaseMapper().selectCount(wrapper);
     }
+
+    @Override
+    public String getOrderNoById(Long id) {
+        return this.getById(id).getOrderNo();
+    }
 }

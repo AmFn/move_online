@@ -26,6 +26,8 @@ public class OrderEntity implements Serializable {
 	 */
 	@TableId(value = "id", type = IdType.AUTO)
 	private Long id;
+
+	private String orderNo;
 	/**
 	 * 用户id
 	 */
@@ -86,6 +88,7 @@ public class OrderEntity implements Serializable {
 	 * 消息
 	 */
 	private String message;
+
 	/**
 	 * 是否删除;0未删除|1删除
 	 */

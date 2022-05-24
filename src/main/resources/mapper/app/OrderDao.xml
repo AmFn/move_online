@@ -23,6 +23,7 @@
         <result property="isDel" column="is_del"/>
         <result property="sourceAddressId" column="source_address_id"/>
         <result property="destinationAddressId" column="destination_address_id"/>
+        <result property="orderNo" column="order_no"/>
     </resultMap>
 
 

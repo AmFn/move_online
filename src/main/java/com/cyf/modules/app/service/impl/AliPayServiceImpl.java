@@ -3,9 +3,14 @@ package com.cyf.modules.app.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.*;
 import com.alipay.api.response.*;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.cyf.common.exception.RRException;
 import com.cyf.common.utils.Constant;
+import com.cyf.modules.app.entity.CompensateEntity;
 import com.cyf.modules.app.entity.OrderEntity;
 import com.cyf.modules.app.service.OrderService;
 import com.google.gson.Gson;
@@ -35,16 +40,19 @@ public class AliPayServiceImpl implements AliPayService {
     public String tradeCreate(Long orderId) {
         try {
             OrderEntity orderInfo = orderService.getById(orderId);
+            orderInfo.setOrderNo(IdWorker.getIdStr());
             AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
             request.setNotifyUrl(config.getProperty("alipay.notify-url"));
             request.setReturnUrl(config.getProperty("alipay.return-url"));
             //组装当前业务方法的请求参数
             JSONObject bizContent = new JSONObject();
-            bizContent.put("out_trade_no", orderInfo.getId());
+            bizContent.put("out_trade_no", orderInfo.getOrderNo());
             bizContent.put("total_amount", orderInfo.getTotalPrice().setScale(2));
             bizContent.put("subject", "move_online");
             bizContent.put("product_code", "FAST_INSTANT_TRADE_PAY");
             request.setBizContent(bizContent.toString());
+
+            orderService.updateById(orderInfo);
             log.info("bizcontent===》{}", bizContent.toString());
             //执行请求，调用支付宝接口
             AlipayTradePagePayResponse response = alipayClient.pageExecute(request);
@@ -104,5 +112,35 @@ public class AliPayServiceImpl implements AliPayService {
     @Override
     public void refund(String orderNo, String reason) {
 
+    }
+
+    @Override
+    public String refundByCompensateItem(CompensateEntity item) {
+        String orderNo= orderService.getOrderNoById(item.getOrderId());
+        if(StringUtils.isBlank(orderNo)){
+            throw  new RRException("订单号错误");
+        }
+
+
+        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+        JSONObject bizContent = new JSONObject();
+        bizContent.put("trade_no",orderNo);
+        bizContent.put("refund_amount", item.getCompensate().setScale(2));
+        bizContent.put("out_request_no", "HZ01RF001");
+
+
+        request.setBizContent(bizContent.toString());
+        AlipayTradeRefundResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+        if(response.isSuccess()){
+            log.info("调用成功");
+        } else {
+            log.info("调用失败");
+        }
+        return null;
     }
 }

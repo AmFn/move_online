@@ -1,6 +1,7 @@
 package com.cyf.modules.app.controller;
 
 import com.cyf.common.utils.R;
+import com.cyf.modules.app.entity.CompensateEntity;
 import com.cyf.modules.app.service.AliPayService;
 import com.cyf.modules.app.service.OrderService;
 import io.swagger.annotations.Api;
@@ -13,7 +14,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/app/ali-pay")
-@Api(tags = "网站支付宝支付")
+@Api(tags = "支付宝支付")
 @Slf4j
 public class AliPayController {
 
@@ -40,14 +41,18 @@ public class AliPayController {
     @ApiOperation("查询订单：测试订单状态用")
     @GetMapping("/query/{orderNo}")
     public R queryOrder(@PathVariable("orderNo") String orderNo)  {
-
         log.info("查询订单");
-
         String result = aliPayService.queryOrder(orderNo);
         return R.ok().put("result", result);
-
     }
 
+    @ApiOperation("退款")
+    @PostMapping("/refund")
+    public R queryOrder(@RequestBody CompensateEntity item)  {
+        log.info("查询订单");
+        String result = aliPayService.refundByCompensateItem(item);
+        return R.ok().put("result", result);
+    }
 
 
 }

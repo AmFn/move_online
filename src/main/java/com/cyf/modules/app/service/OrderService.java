@@ -52,5 +52,7 @@ public interface OrderService extends IService<OrderEntity> {
     void AutoAssignEmployee(Long id);
 
     int getAssignedEmployeeCount(Long id);
+
+    String getOrderNoById(Long id);
 }
 

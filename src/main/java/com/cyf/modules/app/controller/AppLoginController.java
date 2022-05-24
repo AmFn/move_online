@@ -32,7 +32,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/app")
-@Api(tags="APP登录接口")
+@Api(tags="登录接口")
 public class AppLoginController {
     @Autowired
     private UserService userService;
